@@ -1,0 +1,81 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <title>Free Trial Download</title>
+  <style>
+    body {
+      font-family: Arial, sans-serif;
+      background: #f0f0f0;
+      padding: 50px;
+      text-align: center;
+    }
+    .container {
+      background: #fff;
+      padding: 30px;
+      border-radius: 10px;
+      display: inline-block;
+      box-shadow: 0 0 10px rgba(0,0,0,0.1);
+    }
+    input, select, button {
+      padding: 10px;
+      margin: 10px;
+      width: 80%;
+      max-width: 300px;
+    }
+    .hidden {
+      display: none;
+    }
+    .button {
+      background-color: #007bff;
+      color: white;
+      border: none;
+      border-radius: 5px;
+      cursor: pointer;
+    }
+    .button:hover {
+      background-color: #0056b3;
+    }
+    .error {
+      color: red;
+      font-size: 0.9em;
+    }
+    label {
+      display: block;
+      margin-top: 10px;
+      font-weight: bold;
+    }
+  </style>
+</head>
+<body>
+<div class="container">
+  <h2>Free Trial Download</h2>
+  <p>Fill out the form to get your download</p>
+
+  <form id="userForm" method="POST">
+    <input type="text" name="name" placeholder="Your Name" required><br>
+    <input type="email" name="email" placeholder="Your Email" required><br>
+    <input type="text" name="phone" placeholder="Phone Number"><br>
+    <input type="text" name="company" placeholder="Company Name"><br>
+    <select name="country" required>
+      <option value="">Select Country</option>
+      <option value="USA">United States</option>
+      <option value="UK">United Kingdom</option>
+      <option value="India">India</option>
+      <option value="Canada">Canada</option>
+      <option value="Other">Other</option>
+    </select><br>
+    <label><input type="checkbox" name="agree" required> I agree to the terms and conditions</label>
+    <br>
+    <button type="submit" class="button">Submit</button>
+  </form>
+
+  {% if download_ready %}
+  <div>
+    <p>Thanks! Click below to download:</p>
+    <a href="{{ url_for('static', filename='myapp.exe') }}" class="button" download>Download Setup</a>
+  </div>
+  {% endif %}
+</div>
+</body>
+</html>

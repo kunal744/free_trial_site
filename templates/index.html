@@ -1,0 +1,160 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Free Trial Download</title>
+    <style>
+        * {
+            box-sizing: border-box;
+            margin: 0;
+            padding: 0;
+        }
+
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            background-color: #f4f7fa;
+            color: #333;
+            height: 100vh;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            padding: 20px;
+        }
+
+        .container {
+            background: #fff;
+            padding: 30px;
+            border-radius: 8px;
+            box-shadow: 0 10px 30px rgba(0, 0, 0, 0.1);
+            width: 100%;
+            max-width: 450px;
+            text-align: center;
+        }
+
+        h2 {
+            font-size: 26px;
+            margin-bottom: 15px;
+            color: #007bff;
+        }
+
+        p {
+            font-size: 16px;
+            color: #666;
+            margin-bottom: 30px;
+        }
+
+        input, button {
+            width: 100%;
+            padding: 12px;
+            margin-bottom: 15px;
+            border-radius: 8px;
+            border: 1px solid #ddd;
+            font-size: 16px;
+            color: #333;
+        }
+
+        input[type="text"], input[type="email"] {
+            background-color: #fafafa;
+        }
+
+        input[type="checkbox"] {
+            width: auto;
+            margin-right: 8px;
+            vertical-align: middle;
+        }
+
+        button {
+            background-color: #007bff;
+            color: white;
+            border: none;
+            cursor: pointer;
+            font-size: 18px;
+            transition: background-color 0.3s ease;
+        }
+
+        button:hover {
+            background-color: #0056b3;
+        }
+
+        .terms {
+            text-align: left; /* Left align terms */
+            margin-bottom: 20px;
+        }
+
+        .terms label {
+            font-size: 14px;
+            color: #555;
+        }
+
+        .download-link {
+            margin-top: 20px;
+            font-size: 16px;
+            color: #007bff;
+        }
+
+        .download-link a {
+            font-weight: bold;
+            color: #007bff;
+            text-decoration: none;
+        }
+
+        .download-link a:hover {
+            text-decoration: underline;
+        }
+
+        .footer {
+            margin-top: 30px;
+            font-size: 14px;
+            color: #777;
+        }
+    </style>
+</head>
+<body>
+
+    <div class="container">
+        <h2>Free Trial Download</h2>
+        <p>Fill in your details to access the free trial setup.</p>
+
+        <!-- Form -->
+        <form method="POST">
+            <input type="text" name="name" placeholder="Your Name" required><br>
+            <input type="email" name="email" placeholder="Your Email" required><br>
+            <input type="text" name="phone" placeholder="Your Phone (Optional)"><br>
+            <input type="text" name="company" placeholder="Company Name (Optional)"><br>
+            <input type="text" name="country" placeholder="Your Country" required><br>
+
+            <!-- Terms and Checkbox -->
+            <div class="terms">
+                <input type="checkbox" name="agree" required>
+                <label for="agree">I agree to the terms and conditions</label>
+            </div>
+
+            <button type="submit">Submit</button>
+        </form>
+
+        <!-- Show download link after form submission -->
+        {% if download_ready %}
+            <div class="download-link">
+                <p>Thank you! Click below to download:</p>
+                <a href="{{ url_for('download', filename='DeckUp_Setup.exe') }}" download id="downloadLink">Download Setup</a>
+            </div>
+        {% else %}
+            <p>Please fill in the form to get the download link.</p>
+        {% endif %}
+    </div>
+
+    <script>
+        document.getElementById('downloadLink')?.addEventListener('click', function() {
+            // Hide the download link once clicked
+            this.style.display = 'none';
+
+            // Set a timer to refresh the page after download (you can adjust time as needed)
+            setTimeout(function() {
+                location.reload();  // Refresh the page after 5 seconds (5000 ms)
+            }, 5000);
+        });
+    </script>
+
+</body>
+</html>
