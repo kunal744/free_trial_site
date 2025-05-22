@@ -4,8 +4,8 @@ import os
 app = Flask(__name__)
 app.secret_key = 'your-secret-key'  # Needed for flash messages
 
-# Replace this path with the folder where your file is stored
-DOWNLOAD_FOLDER = os.path.join(os.path.dirname(__file__), 'downloads')
+# ✅ Updated path to match where your file actually is
+DOWNLOAD_FOLDER = os.path.join(os.path.dirname(__file__), 'statics', 'files')
 app.config['DOWNLOAD_FOLDER'] = DOWNLOAD_FOLDER
 
 @app.route('/', methods=['GET', 'POST'])
@@ -22,14 +22,17 @@ def index():
         if not name or not email or not country or not agree:
             flash("Please complete all required fields.", "error")
         else:
-            # Normally you'd save data or send email here
             download_ready = True
 
     return render_template('index.html', download_ready=download_ready)
 
 @app.route('/download/<filename>')
 def download(filename):
-    return send_from_directory(app.config['DOWNLOAD_FOLDER'], filename, as_attachment=True)
+    try:
+        return send_from_directory(app.config['DOWNLOAD_FOLDER'], filename, as_attachment=True)
+    except FileNotFoundError:
+        flash("File not found.", "error")
+        return redirect(url_for('index'))
 
 if __name__ == '__main__':
     app.run(debug=True)
