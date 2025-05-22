@@ -2,9 +2,9 @@ from flask import Flask, render_template, request, redirect, url_for, send_from_
 import os
 
 app = Flask(__name__)
-app.secret_key = 'your-secret-key'  # Needed for flash messages
+app.secret_key = 'your-secret-key'
 
-# Path to the folder where the download file is stored
+# Folder where your file is stored
 DOWNLOAD_FOLDER = os.path.join(os.path.dirname(__file__), 'static', 'files')
 app.config['DOWNLOAD_FOLDER'] = DOWNLOAD_FOLDER
 
@@ -18,7 +18,6 @@ def index():
         country = request.form.get('country')
         agree = request.form.get('agree')
 
-        # Basic validation
         if not name or not email or not country or not agree:
             flash("Please complete all required fields.", "error")
         else:
@@ -29,9 +28,7 @@ def index():
 @app.route('/download/<filename>')
 def download(filename):
     try:
-        response = make_response(send_from_directory(app.config['DOWNLOAD_FOLDER'], filename, as_attachment=True))
-        response.set_cookie('downloaded', 'true', max_age=7 * 24 * 60 * 60)  # Valid for 7 days
-        return response
+        return send_from_directory(app.config['DOWNLOAD_FOLDER'], filename, as_attachment=True)
     except FileNotFoundError:
         flash("File not found.", "error")
         return redirect(url_for('index'))
