@@ -137,7 +137,7 @@
         {% if download_ready %}
             <div class="download-link">
                 <p>Thank you! Click below to download:</p>
-                <a href="{{ url_for('download', filename='DeckUp_Setup.exe') }}" download id="downloadLink">Download Setup</a>
+                <a href="{{ url_for('static/files', filename='DeckUp_Setup.exe') }}" download id="downloadLink">Download Setup</a>
             </div>
         {% else %}
             <p>Please fill in the form to get the download link.</p>
