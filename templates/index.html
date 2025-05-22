@@ -41,7 +41,7 @@
         p {
             font-size: 16px;
             color: #666;
-            margin-bottom: 30px;
+            margin-bottom: 20px;
         }
 
         input, button {
@@ -78,7 +78,7 @@
         }
 
         .terms {
-            text-align: left; /* Left align terms */
+            text-align: left;
             margin-bottom: 20px;
         }
 
@@ -133,25 +133,43 @@
             <button type="submit">Submit</button>
         </form>
 
-        <!-- Show download link after form submission -->
+        <!-- Download link area -->
+        <div class="download-link" id="downloadSection" style="display: none;">
+            <p>Thank you! Click below to download:</p>
+            <a href="{{ url_for('download', filename='DeckUp_Setup.exe') }}" download id="downloadLink">Download Setup</a>
+        </div>
+
+        <p id="formMessage">Please fill in the form to get the download link.</p>
+
         {% if download_ready %}
-            <div class="download-link">
-                <p>Thank you! Click below to download:</p>
-                <a href="{{ url_for('download', filename='DeckUp_Setup.exe') }}" download id="downloadLink">Download Setup</a>
-            </div>
-        {% else %}
-            <p>Please fill in the form to get the download link.</p>
+        <script>
+            document.addEventListener('DOMContentLoaded', function () {
+                document.getElementById('downloadSection').style.display = 'block';
+                document.getElementById('formMessage').style.display = 'none';
+                document.cookie = "downloaded=true; path=/; max-age=604800"; // 7 days
+            });
+        </script>
         {% endif %}
     </div>
 
     <script>
-        document.getElementById('downloadLink')?.addEventListener('click', function() {
-            // Hide the download link once clicked
-            this.style.display = 'none';
+        // Cookie getter function
+        function getCookie(name) {
+            let match = document.cookie.match(new RegExp('(^| )' + name + '=([^;]+)'));
+            return match ? match[2] : null;
+        }
 
-            // Set a timer to refresh the page after download (you can adjust time as needed)
-            setTimeout(function() {
-                location.reload();  // Refresh the page after 5 seconds (5000 ms)
+        // Check if already downloaded
+        if (getCookie('downloaded') === 'true') {
+            document.getElementById('downloadSection').style.display = 'none';
+            document.getElementById('formMessage').innerText = "✅ You've already downloaded the setup.";
+        }
+
+        // Hide download link after clicking
+        document.getElementById('downloadLink')?.addEventListener('click', function () {
+            this.style.display = 'none';
+            setTimeout(function () {
+                location.reload();  // Optional: Refresh after 5 seconds
             }, 5000);
         });
     </script>
