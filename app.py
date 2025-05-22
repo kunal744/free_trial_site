@@ -1,10 +1,10 @@
-from flask import Flask, render_template, request, redirect, url_for, send_from_directory, flash
+from flask import Flask, render_template, request, redirect, url_for, send_from_directory, flash, make_response
 import os
 
 app = Flask(__name__)
 app.secret_key = 'your-secret-key'  # Needed for flash messages
 
-# ✅ Updated path to match where your file actually is
+# Path to the folder where the download file is stored
 DOWNLOAD_FOLDER = os.path.join(os.path.dirname(__file__), 'static', 'files')
 app.config['DOWNLOAD_FOLDER'] = DOWNLOAD_FOLDER
 
@@ -29,7 +29,9 @@ def index():
 @app.route('/download/<filename>')
 def download(filename):
     try:
-        return send_from_directory(app.config['DOWNLOAD_FOLDER'], filename, as_attachment=True)
+        response = make_response(send_from_directory(app.config['DOWNLOAD_FOLDER'], filename, as_attachment=True))
+        response.set_cookie('downloaded', 'true', max_age=7 * 24 * 60 * 60)  # Valid for 7 days
+        return response
     except FileNotFoundError:
         flash("File not found.", "error")
         return redirect(url_for('index'))
