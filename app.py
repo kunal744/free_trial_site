@@ -5,7 +5,7 @@ app = Flask(__name__)
 app.secret_key = 'your-secret-key'  # Needed for flash messages
 
 # ✅ Updated path to match where your file actually is
-DOWNLOAD_FOLDER = os.path.join(os.path.dirname(__file__), 'statics', 'files')
+DOWNLOAD_FOLDER = os.path.join(os.path.dirname(__file__), 'static', 'files')
 app.config['DOWNLOAD_FOLDER'] = DOWNLOAD_FOLDER
 
 @app.route('/', methods=['GET', 'POST'])
