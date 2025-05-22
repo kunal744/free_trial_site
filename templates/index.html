@@ -146,31 +146,47 @@
             document.addEventListener('DOMContentLoaded', function () {
                 document.getElementById('downloadSection').style.display = 'block';
                 document.getElementById('formMessage').style.display = 'none';
-                document.cookie = "downloaded=true; path=/; max-age=604800"; // 7 days
             });
         </script>
         {% endif %}
     </div>
 
+    <!-- Script for cookie logic -->
     <script>
-        // Cookie getter function
         function getCookie(name) {
             let match = document.cookie.match(new RegExp('(^| )' + name + '=([^;]+)'));
             return match ? match[2] : null;
         }
 
-        // Check if already downloaded
-        if (getCookie('downloaded') === 'true') {
-            document.getElementById('downloadSection').style.display = 'none';
-            document.getElementById('formMessage').innerText = "✅ You've already downloaded the setup.";
+        function setCookie(name, value, days) {
+            let expires = "";
+            if (days) {
+                const date = new Date();
+                date.setTime(date.getTime() + (days * 24 * 60 * 60 * 1000));
+                expires = "; expires=" + date.toUTCString();
+            }
+            document.cookie = name + "=" + (value || "") + expires + "; path=/";
         }
 
-        // Hide download link after clicking
-        document.getElementById('downloadLink')?.addEventListener('click', function () {
-            this.style.display = 'none';
-            setTimeout(function () {
-                location.reload();  // Optional: Refresh after 5 seconds
-            }, 5000);
+        document.addEventListener("DOMContentLoaded", function () {
+            const downloadSection = document.getElementById('downloadSection');
+            const formMessage = document.getElementById('formMessage');
+            const downloadLink = document.getElementById('downloadLink');
+
+            // Already downloaded? Hide the download section
+            if (getCookie('downloaded') === 'true') {
+                if (downloadSection) downloadSection.style.display = 'none';
+                if (formMessage) formMessage.innerText = "✅ You've already downloaded the setup.";
+            }
+
+            // On download click, set the cookie and hide the section
+            if (downloadLink) {
+                downloadLink.addEventListener('click', function () {
+                    setCookie('downloaded', 'true', 7); // valid for 7 days
+                    if (downloadSection) downloadSection.style.display = 'none';
+                    if (formMessage) formMessage.innerText = "✅ You've already downloaded the setup.";
+                });
+            }
         });
     </script>
 
